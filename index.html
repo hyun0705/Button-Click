@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Button</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
+        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="main-title" id="levelText">Lv.1 현재 확률: 99%</h1>
+        <h3 class="sub-title">버튼을 누르세요</h3>
+        <button class="btn" id="challengeBtn">도전하기</button>
+        <div class="result" id="resultMsg">
+
+        </div>
+
+        <div class="ranking">
+
+            <h4>🏆 랭킹</h4>
+            <ul>
+                <li>상위 4%는 ~스테이지에서 사망했습니다</li>
+                <li>상위 11%는 ~스테이지에서 사망했습니다</li>
+                <li>상위 23%는 ~스테이지에서 사망했습니다</li>
+                <li id="bestInfo">지금까지의 최고 기록: Lv.1</li>
+                <li id="myRank">나는 상위 몇%입니다</li>
+            </ul>
+        </div>
+        <p class="share" id="shareBtn">
+            공유해서 1코인 얻으세요
+            <a href="#">
+                <i class="fa-solid fa-share-nodes"></i>
+            </a>
+        </p>
+
+    </div>
+    <div class="community">
+
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
