@@ -1,0 +1,7 @@
+[
+  { "id": "user1", "level": 7, "timestamp": "2025-08-03T00:00:00Z" },
+  { "id": "user2", "level": 13, "timestamp": "2025-08-03T00:10:00Z" },
+  { "id": "user3", "level": 9, "timestamp": "2025-08-03T00:20:00Z" },
+  { "id": "user4", "level": 5, "timestamp": "2025-08-03T00:30:00Z" },
+  { "id": "user5", "level": 20, "timestamp": "2025-08-03T00:40:00Z" }
+]
