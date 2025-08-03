@@ -133,43 +133,29 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // 공유 버튼 클릭 시 재도전 허용
-shareBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log("공유 시도함");
-    Kakao.Link.sendDefault({
-        objectType: 'feed',
-        content: {
-            title: '럭키 버튼 도전!',
-            description: '나 몇 단계까지 갔게? 😎 너도 도전해봐!',
-            imageUrl: 'https://t1.kakaocdn.net/kakaocorp/kakaocorp/admin/home/bg_event_230703.png',
-            link: {
-                mobileWebUrl: window.location.href,
-                webUrl: window.location.href,
-            },
-        },
-        buttons: [
-            {
-                title: '나도 도전하기',
-                link: {
-                    mobileWebUrl: window.location.href,
-                    webUrl: window.location.href,
-                },
-            }
-        ],
-        success: () => {
-            console.log('[카카오 공유 성공]');
-            setCookie('retryAvailable', 'true', 1);
-            setCookie('gameOver', '', -1);
-            setCookie('lastLevel', '', -1);
-            alert('공유 완료! 재도전 기회가 복구되었습니다.');
-            location.reload();
-        },
-        fail: () => {
-            alert('공유 실패 😢');
-        },
-    });
-});
+shareBtn.addEventListener("click", async () => {
+    const shareData = {
+        title: "럭키 버튼 도전!",
+        text: "나 몇 단계까지 갔게? 😎 너도 도전해봐!",
+        url: window.location.href,
+    };
 
+    try {
+        await navigator.share(shareData);
+        console.log("공유 성공!");
+
+        // 공유 성공한 걸로 간주하고 재도전 기회 부여
+        setCookie('retryAvailable', 'true', 1);
+        setCookie('gameOver', '', -1);
+        setCookie('lastLevel', '', -1);
+        alert("공유 완료! 재도전 기회가 복구되었습니다.");
+        location.reload();
+
+    } catch (err) {
+        console.error("공유 실패 또는 취소됨", err);
+        alert("공유를 완료해야 재도전할 수 있어요!");
+    }
+});
 // 랭킹 통계 JSON 불러오기
 fetch('data/rankings.json')
     .then(res => res.json())
