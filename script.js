@@ -131,7 +131,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
-
 // 공유 버튼 클릭 시 재도전 허용
 shareBtn.addEventListener("click", async () => {
     const bestLevel = parseInt(getCookie("bestLevel"))
