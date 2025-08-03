@@ -136,7 +136,7 @@ shareBtn.addEventListener("click", async () => {
     const bestLevel = parseInt(getCookie("bestLevel"))
     const shareData = {
         title: "럭키 버튼 도전!",
-        text: `나는 Lv.${shareLevel}까지 갔다! 😎 너도 도전해봐!`,
+        text: `나는 Lv.${bestLevel}까지 갔다! 😎 너도 도전해봐!`,
         url: window.location.href,
     };
 
