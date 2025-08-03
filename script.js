@@ -134,9 +134,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // 공유 버튼 클릭 시 재도전 허용
 shareBtn.addEventListener("click", async () => {
+    const bestLevel = parseInt(getCookie("bestLevel"))
     const shareData = {
         title: "럭키 버튼 도전!",
-        text: "나 몇 단계까지 갔게? 😎 너도 도전해봐!",
+        text: `나는 Lv.${shareLevel}까지 갔다! 😎 너도 도전해봐!`,
         url: window.location.href,
     };
 
@@ -156,17 +157,18 @@ shareBtn.addEventListener("click", async () => {
         alert("공유를 완료해야 재도전할 수 있어요!");
     }
 });
+
 // 랭킹 통계 JSON 불러오기
 fetch('data/rankings.json')
     .then(res => res.json())
     .then(data => {
         const rankingList = document.getElementById('rankingList');
         rankingList.innerHTML = `
-            <li>상위 1%는 ${data.top1} 스테이지에서 사망했습니다</li>
-            <li>상위 5%는 ${data.top5} 스테이지에서 사망했습니다</li>
-            <li>상위 10%는 ${data.top10} 스테이지에서 사망했습니다</li>
-            <li>상위 20%는 ${data.top20} 스테이지에서 사망했습니다</li>
-            <li>상위 50%는 ${data.top50} 스테이지에서 사망했습니다</li>
+            <li>상위 1%는 ${data.top1} 스테이지에서 사망했습니다.</li>
+            <li>상위 5%는 ${data.top5} 스테이지에서 사망했습니다.</li>
+            <li>상위 10%는 ${data.top10} 스테이지에서 사망했습니다.</li>
+            <li>상위 20%는 ${data.top20} 스테이지에서 사망했습니다.</li>
+            <li>상위 50%는 ${data.top50} 스테이지에서 사망했습니다.</li>
             `;
     })
     .catch(error => {
