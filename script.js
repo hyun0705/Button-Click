@@ -132,14 +132,14 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 });
 // 공유 버튼 클릭 시 재도전 허용
-shareBtn.addEventListener("click", async () => {
+shareBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-    
+
     if (!navigator.share) {
         alert("이 브라우저에서는 공유 기능이 지원되지 않습니다.");
         return;
     }
-    
+
     const bestLevel = parseInt(getCookie("bestLevel"))
     const shareData = {
         title: "럭키 버튼 도전!",
