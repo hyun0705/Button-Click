@@ -18,15 +18,15 @@ const expiresTest = "expires=" + dTest.toUTCString();
 console.log(expiresTest);
 console.log(document.cookie);
 //
-const value = "; " + document.cookie;
-let name = '바나나'
-let str = "바나나=노랑; 사과=빨강; 수박=초록"
-console.log(str);
+// const value = "; " + document.cookie;
+// let name = '바나나'
+// let str = "바나나=노랑; 사과=빨강; 수박=초록"
+// console.log(str);
 
 //쿠키 저장
-function setCookie(name, value, days = 365) {
+function setCookie(name, value, days = 1) {
     const d = new Date();
-    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); //유효기간 1년으로 세팅
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); //유효기간 1일으로 세팅
     const expires = "expires=" + d.toUTCString(); // 
     document.cookie = `${name}=${value}; ${expires}; path=/`;
 }
@@ -169,3 +169,35 @@ shareBtn.addEventListener("click", (e) => {
         },
     });
 });
+
+// 랭킹 통계 JSON 불러오기
+fetch('data/rankings.json')
+    .then(res => res.json())
+    .then(data => {
+        const rankingList = document.getElementById('rankingList');
+        rankingList.innerHTML = `
+            <li>상위 1%는 ${data.top1} 스테이지에서 사망했습니다</li>
+            <li>상위 5%는 ${data.top5} 스테이지에서 사망했습니다</li>
+            <li>상위 10%는 ${data.top10} 스테이지에서 사망했습니다</li>
+            <li>상위 20%는 ${data.top20} 스테이지에서 사망했습니다</li>
+            <li>상위 50%는 ${data.top50} 스테이지에서 사망했습니다</li>
+            `;
+    })
+    .catch(error => {
+        console.error("랭킹 데이터를 불러오지 못했습니다:", error);
+    });
+
+// 현재 시간 기준으로 records 버전 선택
+const hour = new Date().getHours(); // 0~23
+const version = Math.floor(hour / 8); // 0~2
+const filePath = `data/records_${version}.json`;
+
+fetch(filePath)
+    .then(res => res.json())
+    .then(data => {
+        console.log(`[시간 ${hour}시] ${filePath} 로딩 완료`, data);
+
+        // 여기에 calculateRanking 로직 직접 넣거나,
+        // 백엔드 없이 그냥 보여주기용으로 써도 됨
+    })
+    .catch(err => console.error("불러오기 실패", err));
