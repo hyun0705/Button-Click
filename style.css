@@ -11,6 +11,8 @@ html {
 
 body {
     background-color: rgb(220, 255, 252);
+    touch-action: manipulation; 
+    /* 더블터치 줌 방지 */
 }
 
 
