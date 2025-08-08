@@ -1,6 +1,14 @@
 Kakao.init("f542d96e283a54f650bfdaa9ff56263a");
 console.log(Kakao.isInitialized());
 
+
+//모바일일 경우 → true 반환
+function isMobileDevice() {
+    const ua = navigator.userAgent;
+    return /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+}
+
+
 let level = 1;
 
 // 성공확률
@@ -82,13 +90,13 @@ btn.addEventListener("click", () => {
         levelText.textContent = `Lv.${level} 현재 확률: ${newRate}%`;
     } else {
         // 실패 시
-        setCookie("gameOver", "true");//쿠키 저장
-        setCookie("lastLevel", level);
+        localStorage.setItem("gameOver", "true");//쿠키 저장
+        localStorage.setItem("lastLevel", level);
 
         //최고기록 저장
-        const prevBest = parseInt(getCookie("bestLevel")) || 0;
+        const prevBest = parseInt(localStorage.getItem("bestLevel")) || 0;
         if (level > prevBest) {
-            setCookie("bestLevel", level); //최고 기록을 현재 점수로 덮어씌움
+            localStorage.setItem("bestLevel", level); //최고 기록을 현재 점수로 덮어씌움
         }
 
 
@@ -107,20 +115,45 @@ btn.addEventListener("click", () => {
 //페이지 로드시 쿠키 확인
 window.addEventListener("DOMContentLoaded", () => {
     //HTML 문서의 DOM이 모두 로드되었을 때
-    const isGameOver = getCookie("gameOver"); //null 이거나 "true"
-    const lastLevel = parseInt(getCookie("lastLevel")); //레밸 배열값 정수로
-    const retryAvailable = getCookie("retryAvailable");
-    const bestLevel = parseInt(getCookie("bestLevel")) || 1;
+
+    //pc로 접속하면 qr코드 보여주는 기능
+    const isMobile = isMobileDevice();
+    const gameContainer = document.querySelector(".container");
+    const mobileOnlyNotice = document.getElementById("mobileOnlyNotice");
+
+    if (!isMobile) {
+        // PC 접속하면
+        gameContainer.style.display = "none"; // 기본 컨테이너 숨김
+        mobileOnlyNotice.style.display = "block"; // qr코드 컨테이너 보여줌
+
+        const canvas = document.getElementById("mobileQrCode");
+        QRCode.toCanvas(canvas, window.location.href, {
+            width: 200,             // 크기 (픽셀)
+            margin: 2,              // 여백 (모듈 수 기준, 기본값 4)
+        }, function (error) {
+            if (error) console.error("QR 코드 생성 실패:", error);
+            else console.log("QR 코드 생성 완료!");
+        });
+        return;
+    }
+
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // ↓↓↓ 모바일일 때만 아래 게임 로직 실행 ↓↓↓
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    const isGameOver = localStorage.getItem("gameOver"); //null 이거나 "true"
+    const lastLevel = parseInt(localStorage.getItem("lastLevel")); //레밸 배열값 정수로
+    const retryAvailable = localStorage.getItem("retryAvailable");
+    const bestLevel = parseInt(localStorage.getItem("bestLevel")) || 1;
     if (retryAvailable === "true") {
         btn.disabled = false; //버튼 활성화
         btn.textContent = "도전하기"
-        bestInfo.textContent = `지금까지의 최고 기록: Lv.${getCookie("bestLevel")}`;
+        bestInfo.textContent = `지금까지의 최고 기록: Lv.${localStorage.getItem("bestLevel")}`;
         resultMsg.style.display = "none";
 
     }
 
     if (isGameOver === "true") {
-
         if (!isNaN(lastLevel)) {
             btn.disabled = true; //버튼 비활성화
             btn.textContent = "재도전 불가 😵";
@@ -140,7 +173,7 @@ shareBtn.addEventListener("click", async (e) => {
         return;
     }
 
-    const bestLevel = parseInt(getCookie("bestLevel"))
+    const bestLevel = parseInt(localStorage.getItem("bestLevel"))
     const shareData = {
         title: "럭키 버튼 도전!",
         text: `나는 Lv.${bestLevel}까지 갔다! 😎 너도 도전해봐!`,
@@ -152,9 +185,9 @@ shareBtn.addEventListener("click", async (e) => {
         console.log("공유 성공!");
 
         // 공유 성공한 걸로 간주하고 재도전 기회 부여
-        setCookie('retryAvailable', 'true', 1);
-        setCookie('gameOver', '', -1);
-        setCookie('lastLevel', '', -1);
+        localStorage.setItem('retryAvailable', 'true', 1);
+        localStorage.removeItem('gameOver', '', -1);
+        localStorage.removeItem('lastLevel', '', -1);
         alert("공유 완료! 재도전 기회가 복구되었습니다.");
         location.reload();
 

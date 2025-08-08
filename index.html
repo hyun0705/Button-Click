@@ -3,16 +3,28 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Button</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!--더블클릭시 화면확대 방지-->
+    <title>럭키 버튼! - 나의 운은 어디까지?</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
         integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
 </head>
 
 <body>
+    <!-- 모바일만 플레이 가능 안내 -->
+    <div id="mobileOnlyNotice" style="display: none; text-align: center; padding: 2rem;">
+        <h2>이 게임은 원활한 플레이를 위해 모바일 기기에서만 이용 가능합니다.</h2>
+        <p>모바일로 접속하려면 아래 QR코드를 스캔하세요!</p>
+        <canvas id="mobileQrCode" style="margin-top: 1rem;"></canvas>
+        <p>⭐럭키 버튼⭐</p>
+    </div>
+
+
     <div class="container">
         <h1 class="main-title" id="levelText">Lv.1 현재 확률: 99%</h1>
         <h3 class="sub-title">버튼을 누르세요</h3>

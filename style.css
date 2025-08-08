@@ -1,3 +1,8 @@
+html {
+    font-size: 16px;
+    /* 기본 1rem = 16px */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,6 +11,14 @@
 
 body {
     background-color: rgb(220, 255, 252);
+}
+
+
+#mobileOnlyNotice {
+    background-color: #fff3cd;
+    border: 2px dashed #eead53;
+    border-radius: 10px;
+    margin: 2rem;
 }
 
 .container {
@@ -19,15 +32,20 @@ body {
 }
 
 .main-title {
-    margin: 40px
+    margin-top: 32px;
+    margin-bottom: 32px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 2rem;
+    text-align: center;
 }
 
 .sub-title {
-    margin: 8px
+    margin: 8px;
 }
 
 .press-btn {
-    margin: 20px
+    margin: 20px;
 }
 
 .btn {
@@ -40,7 +58,8 @@ body {
     height: auto;
     box-sizing: border-box;
     border-radius: 50px;
-    font-size: 12px;
+    font-size: 0.75rem;
+    /* 12px */
     color: white;
     font-weight: 700;
     box-shadow: 0px 2px 2px 2px #ffffff40 inset, 0px -2px 2px 2px #00000020 inset;
@@ -52,19 +71,61 @@ body {
     box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
+.ranking {
+    margin: 32px;
+}
+
+.ranking ul li {
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
 .result {
     display: none;
     margin: 12px;
 }
 
-.ranking {
-    margin: 32px;
-}
 
-.ranking ul {}
+
+
+.share {
+    font-size: 1rem;
+}
 
 .share a i {
 
     text-decoration: none;
     color: black;
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+        /* 모바일에서 rem 단위 전체 축소 */
+    }
+
+    .container {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+
+    }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .ranking {
+        margin: 16px;
+    }
+
+    .btn {
+        font-size: 1rem;
+        /* 14px */
+    }
+
+
+    .share {
+        font-size: 0.9rem;
+    }
 }
