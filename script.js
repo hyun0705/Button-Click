@@ -107,6 +107,7 @@ btn.addEventListener("click", () => {
 
     } else {
         // 실패 시
+        shakeScreen();
         btnSound(false)
         localStorage.setItem("gameOver", "true");//쿠키 저장
         localStorage.setItem("lastLevel", level);
@@ -307,6 +308,23 @@ function createSuccessParticles() {
         // 안전 제거 타임아웃
         setTimeout(() => particle.remove(), 1500);
     }
+}
+
+/* 화면 흔들림 효과 */
+function shakeScreen() {
+    document.body.animate([
+        { transform: 'translate(0, 0) rotate(0deg)' },
+        { transform: 'translate(-20px, 10px) rotate(-1deg)' },
+        { transform: 'translate(20px, -10px) rotate(1deg)' },
+        { transform: 'translate(-15px, 15px) rotate(-0.5deg)' },
+        { transform: 'translate(15px, -15px) rotate(0.5deg)' },
+        { transform: 'translate(-10px, 5px) rotate(-0.3deg)' },
+        { transform: 'translate(10px, -5px) rotate(0.3deg)' },
+        { transform: 'translate(0, 0) rotate(0deg)' }
+    ], {
+        duration: 500,
+        easing: 'ease-out'
+    });
 }
 
 
