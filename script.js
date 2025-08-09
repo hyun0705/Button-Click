@@ -82,14 +82,32 @@ const shareBtn = document.getElementById("shareBtn");
 btn.addEventListener("click", () => {
     const successRate = getSuccessRate(level); //성공확률
     const rand = Math.random(); //0~1 난수생성
-
+    createShockwave();
     if (rand < successRate) {
         // 성공 시
+        btnSound(true)
+        createSuccessParticles();
         level++;
         const newRate = Math.round(getSuccessRate(level) * 100); //다음단계 확률
         levelText.textContent = `Lv.${level} 현재 확률: ${newRate}%`;
+        let dots = 0;
+        btn.disabled = true;
+
+        btn.textContent = "대기중"
+        const cooldownInterval = setInterval(() => {
+            dots = (dots + 1) % 4; // 0~3 반복
+            btn.textContent = "대기중" + ".".repeat(dots);
+        }, 250); // 0.25초마다 업데이트
+
+        setTimeout(() => {
+            clearInterval(cooldownInterval);
+            btn.disabled = false;
+            btn.textContent = "도전하기";
+        }, 1500); // 1.5초 쿨다운
+
     } else {
         // 실패 시
+        btnSound(false)
         localStorage.setItem("gameOver", "true");//쿠키 저장
         localStorage.setItem("lastLevel", level);
 
@@ -185,9 +203,9 @@ shareBtn.addEventListener("click", async (e) => {
         console.log("공유 성공!");
 
         // 공유 성공한 걸로 간주하고 재도전 기회 부여
-        localStorage.setItem('retryAvailable', 'true', 1);
-        localStorage.removeItem('gameOver', '', -1);
-        localStorage.removeItem('lastLevel', '', -1);
+        localStorage.setItem('retryAvailable', 'true');
+        localStorage.removeItem('gameOver');
+        localStorage.removeItem('lastLevel');
         alert("공유 완료! 재도전 기회가 복구되었습니다.");
         location.reload();
 
@@ -196,6 +214,101 @@ shareBtn.addEventListener("click", async (e) => {
         alert("공유를 완료해야 재도전할 수 있어요!");
     }
 });
+
+// 버튼 누를시 소리
+function btnSound(isSuccess) {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    const oscillator = audioContext.createOscillator();
+    //OscillatorNode(진동을 만들어서 소리를 발생시키는)를 생성.
+    const gainNode = audioContext.createGain();
+    //볼륨 조절 장치
+    oscillator.connect(gainNode).connect(audioContext.destination);
+    //oscillator → gainNode → audioContext.destination(스피커) 셋을 연결시킴
+
+    if (isSuccess) {
+        //성공하면
+        oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+        // 지금 시각(audioContext.currentTime)에 주파수를 200Hz로 설정
+        oscillator.frequency.exponentialRampToValueAtTime(2000, audioContext.currentTime + 0.1);
+        //지금부터 0.1초 뒤까지 지수적으로 1200Hz로 변하게 함.
+        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+        //현재 볼륨을 0.5으로 설정 (1이 최대, 0이 무음).
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        //0.1초 동안 볼륨을 거의 0까지 부드럽게 줄임.
+        oscillator.start(audioContext.currentTime);
+        //지금 재생 시작
+        oscillator.stop(audioContext.currentTime + 0.1);
+        // 0.1초 뒤에 재생 종료 - 결과: 길이 0.1초짜리 짧은 효과음.
+    }
+    else {
+        oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.2);
+
+        gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.2);
+    }
+}
+
+//버튼 누를때 파동
+const shockwave = document.querySelector('.shockwave');
+function createShockwave() {
+
+    shockwave.classList.remove('active');
+    void shockwave.offsetWidth; // 리플로우 강제 발생
+    shockwave.classList.add('active');
+
+    setTimeout(() => {
+        shockwave.classList.remove('active');
+    }, 1000);
+}
+
+//성공시 파티클
+const levelUpButton = document.getElementById("challengeBtn");
+//파티클이 나올 기준이 되는 버튼
+const particleContainer = document.getElementById("particleContainer");
+//파티클을 담는 컨테이너
+
+function createSuccessParticles() {
+    const buttonRect = levelUpButton.getBoundingClientRect();
+    const containerRect = particleContainer.getBoundingClientRect();
+    //getBoundingClientRect : 화면(Viewport) 기준으로 요소의 위쪽·왼쪽 좌표, 너비, 높이를 반환
+
+    const startX = buttonRect.left - containerRect.left + buttonRect.width / 2;
+    const startY = buttonRect.top - containerRect.top + buttonRect.height / 2;
+    //particle-container에서 버튼중앙까리 떨어진 거리
+
+
+
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle success';
+
+        particle.style.left = startX + 'px';
+        particle.style.top = startY + 'px';
+        //css에 적용
+
+        const angle = (Math.PI * 2 * i) / 20;
+        const velocity = 40 + Math.random() * 60;
+
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity - 20;
+
+        particle.style.setProperty('--tx', `${tx}px`);
+        particle.style.setProperty('--ty', `${ty}px`);
+
+        particleContainer.appendChild(particle);
+
+
+        particle.addEventListener('animationend', () => particle.remove(), { once: true });
+        // 안전 제거 타임아웃
+        setTimeout(() => particle.remove(), 1500);
+    }
+}
+
 
 // 랭킹 통계 JSON 불러오기
 fetch('data/rankings.json')
@@ -227,4 +340,5 @@ fetch(filePath)
         // 여기에 calculateRanking 로직 직접 넣거나,
         // 백엔드 없이 그냥 보여주기용으로 써도 됨
     })
-    .catch(err => console.error("불러오기 실패", err));
+    .catch(err => console.error("불러오기 실패", err)
+    );

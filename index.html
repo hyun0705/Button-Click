@@ -28,13 +28,15 @@
     <div class="container">
         <h1 class="main-title" id="levelText">Lv.1 현재 확률: 99%</h1>
         <h3 class="sub-title">버튼을 누르세요</h3>
-        <button class="btn" id="challengeBtn">도전하기</button>
-        <div class="result" id="resultMsg">
-
+        <div class="btn-container">
+            <button class="btn" id="challengeBtn">도전하기</button>
+            <div class="shockwave"></div>
+            <div id="particleContainer" class="particle-container"></div>
         </div>
 
-        <div class="ranking">
+        <div class="result" id="resultMsg"></div>
 
+        <div class="ranking">
             <h4>🏆 랭킹</h4>
             <ul id="rankingList">
                 <li>상위 4%는 ~스테이지에서 사망했습니다</li>
@@ -50,9 +52,6 @@
                 <i class="fa-solid fa-share-nodes"></i>
             </a>
         </p>
-
-    </div>
-    <div class="community">
 
     </div>
     <script src="script.js"></script>
