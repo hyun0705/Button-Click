@@ -71,7 +71,7 @@ body {
     box-shadow: 0px 2px 2px 2px #ffffff40 inset, 0px -2px 2px 2px #00000020 inset;
     transition: transform 0.05s, box-shadow 0.05s;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .btn:active {
@@ -141,7 +141,7 @@ body {
 }
 
 .particle-container {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
@@ -161,7 +161,7 @@ body {
     height: 8px;
     background: linear-gradient(135deg, #3dd3ee, #ee258d);
     box-shadow: 100 100 100px 100px rgba(41, 96, 180, 0.8);
-    animation: successParticle 1.5s ease-out forwards;
+    animation: successParticle 1s ease-out forwards;
 }
 
 /* 파티클 애니메이션 */
@@ -179,6 +179,39 @@ body {
 
 
 
+.stars {
+    position: fixed; /* 화면 스크롤과 무관하게 항상 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 별 위에 마우스 이벤트가 걸리지 않게 함 */
+    z-index: -1; /* 콘텐츠 뒤쪽에 배치 */
+}
+
+
+/* 개별 별 스타일 */
+.star {
+    position: absolute;
+    background: #1d769c;
+    border-radius: 50%;
+    animation: twinkle ease-in-out infinite;
+}
+
+/* 별 반짝임 애니메이션 */
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
 @media (max-width: 480px) {
     html {

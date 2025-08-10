@@ -8,6 +8,8 @@ function isMobileDevice() {
     return /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
 }
 
+//뒷배경 별 생성
+createStarField()
 
 let level = 1;
 
@@ -18,42 +20,7 @@ function getSuccessRate(level) {
     return Math.max(1 - level * 0.03, 0.03);
 }
 
-const dTest = new Date();
-console.log(dTest);
-dTest.setTime(dTest.getTime() + (365 * 24 * 60 * 60 * 1000))
-console.log(dTest);
-const expiresTest = "expires=" + dTest.toUTCString();
-console.log(expiresTest);
-console.log(document.cookie);
-//
-// const value = "; " + document.cookie;
-// let name = '바나나'
-// let str = "바나나=노랑; 사과=빨강; 수박=초록"
-// console.log(str);
 
-//쿠키 저장
-function setCookie(name, value, days = 1) {
-    const d = new Date();
-    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); //유효기간 1일으로 세팅
-    const expires = "expires=" + d.toUTCString(); // 
-    document.cookie = `${name}=${value}; ${expires}; path=/`;
-}
-
-//쿠키 가져오기
-function getCookie(name) {
-    const value = "; " + document.cookie; // "; gameOver=true; username=minjun; score=100"
-    const parts = value.split("; " + name + "=");
-    //  [
-    //   "; gameOver=true",      // 앞부분
-    //   "minjun; score=100"     // username 뒤에 나오는 부분 (우리가 원하는 것)
-    //  ]
-    if (parts.length === 2)
-        return parts.pop().split(";").shift();
-    //pop : 배열 마지막 요소 꺼내기 -> "minjun; score=100"
-    //split -> minjun; score=100" -> ["minjun", " score=100"]
-    //shift : 배열 첫번째 요소 꺼내기 -> "minjun"
-    return null;
-}
 
 const rankingTable = [
     { level: 20, percentile: 4 },
@@ -82,10 +49,12 @@ const shareBtn = document.getElementById("shareBtn");
 btn.addEventListener("click", () => {
     const successRate = getSuccessRate(level); //성공확률
     const rand = Math.random(); //0~1 난수생성
-    createShockwave();
+
     if (rand < successRate) {
         // 성공 시
         btnSound(true)
+        createButtonCollapse();
+        createShockwave();
         createSuccessParticles();
         level++;
         const newRate = Math.round(getSuccessRate(level) * 100); //다음단계 확률
@@ -108,7 +77,13 @@ btn.addEventListener("click", () => {
     } else {
         // 실패 시
         shakeScreen();
+        createButtonCollapse();
+        setTimeout(() => {
+            createMassiveExplosion();
+        }, 500); // 바로 실행하면 생성되는 위치가 잘못되서 약간 딜레이줌
         btnSound(false)
+
+
         localStorage.setItem("gameOver", "true");//쿠키 저장
         localStorage.setItem("lastLevel", level);
 
@@ -116,8 +91,8 @@ btn.addEventListener("click", () => {
         const prevBest = parseInt(localStorage.getItem("bestLevel")) || 0;
         if (level > prevBest) {
             localStorage.setItem("bestLevel", level); //최고 기록을 현재 점수로 덮어씌움
-        }
 
+        }
 
         btn.disabled = true;
         btn.textContent = "실패 😵";
@@ -126,6 +101,7 @@ btn.addEventListener("click", () => {
         const percentile = getMyPercentile(level);
         bestInfo.textContent = `지금까지의 최고 기록: Lv.${Math.max(level, prevBest)}`;
         myRank.textContent = `나는 상위 ${percentile}%입니다`;
+
     }
 
 });
@@ -162,9 +138,8 @@ window.addEventListener("DOMContentLoaded", () => {
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     const isGameOver = localStorage.getItem("gameOver"); //null 이거나 "true"
     const lastLevel = parseInt(localStorage.getItem("lastLevel")); //레밸 배열값 정수로
-    const retryAvailable = localStorage.getItem("retryAvailable");
     const bestLevel = parseInt(localStorage.getItem("bestLevel")) || 1;
-    if (retryAvailable === "true") {
+    if (isGameOver === "false") {
         btn.disabled = false; //버튼 활성화
         btn.textContent = "도전하기"
         bestInfo.textContent = `지금까지의 최고 기록: Lv.${localStorage.getItem("bestLevel")}`;
@@ -204,7 +179,6 @@ shareBtn.addEventListener("click", async (e) => {
         console.log("공유 성공!");
 
         // 공유 성공한 걸로 간주하고 재도전 기회 부여
-        localStorage.setItem('retryAvailable', 'true');
         localStorage.removeItem('gameOver');
         localStorage.removeItem('lastLevel');
         alert("공유 완료! 재도전 기회가 복구되었습니다.");
@@ -282,8 +256,6 @@ function createSuccessParticles() {
     const startY = buttonRect.top - containerRect.top + buttonRect.height / 2;
     //particle-container에서 버튼중앙까리 떨어진 거리
 
-
-
     for (let i = 0; i < 20; i++) {
         const particle = document.createElement('div');
         particle.className = 'particle success';
@@ -293,7 +265,7 @@ function createSuccessParticles() {
         //css에 적용
 
         const angle = (Math.PI * 2 * i) / 20;
-        const velocity = 40 + Math.random() * 60;
+        const velocity = 40 + Math.random() * 35;
 
         const tx = Math.cos(angle) * velocity;
         const ty = Math.sin(angle) * velocity - 20;
@@ -309,7 +281,6 @@ function createSuccessParticles() {
         setTimeout(() => particle.remove(), 1500);
     }
 }
-
 /* 화면 흔들림 효과 */
 function shakeScreen() {
     document.body.animate([
@@ -326,6 +297,166 @@ function shakeScreen() {
         easing: 'ease-out'
     });
 }
+
+/* 대규모 폭발 효과 */
+function createMassiveExplosion() {
+    const buttonRect = levelUpButton.getBoundingClientRect();
+    const containerRect = particleContainer.getBoundingClientRect();
+    // 컨테이너 기준 버튼 중심 좌표
+    const centerX = buttonRect.left - containerRect.left + buttonRect.width / 2;
+    const centerY = buttonRect.top - containerRect.top + buttonRect.height / 2;
+
+    /* 폭발 링 */
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            const ring = document.createElement('div');
+            ring.style.position = 'absolute';
+            ring.style.left = centerX + 'px';
+            ring.style.top = centerY + 'px';
+            ring.style.width = '0';
+            ring.style.height = '0';
+            ring.style.border = '3px solid #ff0000';
+            ring.style.borderRadius = '50%';
+            ring.style.transform = 'translate(-50%, -50%)'; // 중심 정렬
+            ring.style.pointerEvents = 'none';
+            ring.style.zIndex = '1000';
+
+            particleContainer.appendChild(ring);
+
+            ring.animate(
+                [
+                    { width: '0', height: '0', opacity: 1, borderWidth: '3px' },
+                    { width: '400px', height: '400px', opacity: 0, borderWidth: '1px' }
+                ],
+                { duration: 1000, easing: 'ease-out' }
+            ).onfinish = () => ring.remove();
+        }, i * 100);
+    }
+
+    /* 파편 */
+    for (let i = 0; i < 100; i++) {
+        const fragment = document.createElement('div');
+
+        fragment.style.position = 'absolute';
+        fragment.style.width = Math.random() * 15 + 5 + 'px';
+        fragment.style.height = Math.random() * 15 + 5 + 'px';
+        fragment.style.background = Math.random() > 0.5 ? '#ff0000' : '#ff6600'; // 빨강/주황 랜덤
+
+        // 좌상단 기준이므로 조각의 절반만큼 빼서 정확히 중심에 놓기
+        fragment.style.left = centerX - parseFloat(fragment.style.width) / 2 + 'px';
+        fragment.style.top = centerY - parseFloat(fragment.style.height) / 2 + 'px';
+
+        fragment.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        fragment.style.pointerEvents = 'none';
+        fragment.style.zIndex = '1000';
+        fragment.style.boxShadow = `0 0 ${Math.random() * 20 + 10}px ${Math.random() > 0.5 ? '#ff0000' : '#ff6600'}`;
+
+        particleContainer.appendChild(fragment);
+
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = Math.random() * 500 + 200;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity + Math.random() * 200;
+        const rotation = Math.random() * 1080 - 540;
+
+        fragment.animate(
+            [
+                { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+                { transform: `translate(${tx}px, ${ty}px) scale(0) rotate(${rotation}deg)`, opacity: 0 }
+            ],
+            { duration: 2000, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }
+        ).onfinish = () => fragment.remove();
+    }
+}
+
+
+
+/* 버튼 붕괴 애니메이션 */
+function createButtonCollapse() {
+    /* 버튼 내부 빛 */
+    const buttonRect = levelUpButton.getBoundingClientRect();
+    const containerRect = particleContainer.getBoundingClientRect();
+    // 컨테이너 기준 버튼 중심 좌표
+    const centerX = buttonRect.left - containerRect.left + buttonRect.width / 2;
+    const centerY = buttonRect.top - containerRect.top + buttonRect.height / 2;
+
+    const innerGlow = document.createElement('div');
+    innerGlow.style.position = 'absolute';
+    innerGlow.style.left = centerX + 'px';
+    innerGlow.style.top = centerY + 'px';
+
+    innerGlow.style.width = '20px';
+    innerGlow.style.height = '20px';
+    innerGlow.style.background = 'radial-gradient(circle, #ffffff, #ff0000, transparent)';
+    innerGlow.style.transform = 'translate(-50%, -50%)';
+    innerGlow.style.zIndex = '1000';
+    innerGlow.style.borderRadius = '50%';
+
+    particleContainer.appendChild(innerGlow);
+
+    /* 내부 빛 확산 */
+    innerGlow.animate([
+        {
+            width: '20px',
+            height: '20px',
+            opacity: 1
+        },
+        {
+            width: '500px',
+            height: '500px',
+            opacity: 0
+        }
+    ], {
+        duration: 1200,
+        easing: 'ease-out'
+    }).onfinish = () => innerGlow.remove();
+
+    /* 버튼 글리치 효과 */
+    levelUpButton.animate([
+        { transform: 'scale(1)', filter: 'brightness(1) contrast(1)' },
+        { transform: 'scale(1.05)', filter: 'brightness(2) contrast(1.5)', offset: 0.1 },
+        { transform: 'scale(0.95)', filter: 'brightness(0.5) contrast(2)', offset: 0.2 },
+        { transform: 'scale(1.1)', filter: 'brightness(3) contrast(0.5) hue-rotate(180deg)', offset: 0.3 },
+        { transform: 'scale(0.9)', filter: 'brightness(0.2) contrast(3) saturate(0)', offset: 0.5 },
+        { transform: 'scale(1.2)', filter: 'brightness(5) contrast(5) blur(5px)', offset: 0.7 },
+        { transform: 'scale(0)', filter: 'brightness(0) blur(20px)', opacity: 0 }
+    ], {
+        duration: 1200,
+        easing: 'ease-in'
+    });
+
+}
+
+
+/* 우주 별 필드 생성 */
+function createStarField() {
+    const starsContainer = document.querySelector('.stars');
+
+    // 200개 별 생성
+    for (let i = 0; i < 200; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+
+        //랜덤 위치
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+
+        //랜덤 크기
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+
+        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        star.style.animationDelay = Math.random() * 3 + 's';
+
+        if (Math.random() > 0.7) {
+            star.style.boxShadow = `0 0 ${size * 2}px rgba(255, 255, 255, 0.8)`;
+        }
+
+        starsContainer.appendChild(star);
+    }
+}
+
 
 
 // 랭킹 통계 JSON 불러오기
