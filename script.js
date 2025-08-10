@@ -53,7 +53,6 @@ btn.addEventListener("click", () => {
     if (rand < successRate) {
         // 성공 시
         btnSound(true)
-        createButtonCollapse();
         createShockwave();
         createSuccessParticles();
         level++;
@@ -78,6 +77,8 @@ btn.addEventListener("click", () => {
         // 실패 시
         shakeScreen();
         createButtonCollapse();
+        createDigitalNoise();
+        createScreenCracks();
         setTimeout(() => {
             createMassiveExplosion();
         }, 500); // 바로 실행하면 생성되는 위치가 잘못되서 약간 딜레이줌
@@ -374,6 +375,7 @@ function createMassiveExplosion() {
 /* 버튼 붕괴 애니메이션 */
 function createButtonCollapse() {
     /* 버튼 내부 빛 */
+
     const buttonRect = levelUpButton.getBoundingClientRect();
     const containerRect = particleContainer.getBoundingClientRect();
     // 컨테이너 기준 버튼 중심 좌표
@@ -425,8 +427,89 @@ function createButtonCollapse() {
         easing: 'ease-in'
     });
 
+
 }
 
+/* 디지털 노이즈 효과 */
+function createDigitalNoise() {
+    const buttonRect = levelUpButton.getBoundingClientRect();
+    const containerRect = particleContainer.getBoundingClientRect();
+
+    // 컨테이너 기준 버튼 중심 좌표
+    const centerX = buttonRect.left - containerRect.left;
+    const centerY = buttonRect.top - containerRect.top;
+
+    for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+            const noise = document.createElement('div');
+            noise.style.position = 'absolute'; // 컨테이너 기준
+            noise.style.left = centerX + Math.random() * buttonRect.width + 'px';
+            noise.style.top = centerY + Math.random() * buttonRect.height + 'px';
+            noise.style.width = Math.random() * 40 + 10 + 'px';
+            noise.style.height = '2px';
+            noise.style.background = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.8)`;
+            noise.style.zIndex = '100';
+
+            particleContainer.appendChild(noise);
+
+            noise.animate([
+                { transform: 'scaleX(1) translateX(0)', opacity: 1 },
+                { transform: `scaleX(${Math.random() * 3}) translateX(${Math.random() * 100 - 50}px)`, opacity: 0 }
+            ], {
+                duration: 200,
+                easing: 'steps(4)'
+            }).onfinish = () => noise.remove();
+        }, i * 50);
+    }
+}
+/* 화면 크랙 효과 */
+function createScreenCracks() {
+    const buttonRect = levelUpButton.getBoundingClientRect();
+    const containerRect = particleContainer.getBoundingClientRect();
+    // 컨테이너 기준 버튼 중심 좌표
+    const centerX = buttonRect.left - containerRect.left + buttonRect.width / 2;
+    const centerY = buttonRect.top - containerRect.top + buttonRect.height / 2;
+
+
+    const cracks = document.createElement('div');
+    cracks.style.position = 'absolute';
+    cracks.style.left = centerX + 'px';
+    cracks.style.top = centerY + 'px';
+    cracks.style.transform = 'translate(-50%, -50%)';
+    cracks.style.width = '100%';
+
+    cracks.style.height = '100%';
+    cracks.style.pointerEvents = 'none';
+    cracks.style.zIndex = '999';
+
+    particleContainer.appendChild(cracks);
+
+    for (let i = 0; i < 8; i++) {
+        const crack = document.createElement('div');
+        crack.style.position = 'absolute';
+        crack.style.width = '2px';
+        crack.style.height = '0';
+        crack.style.background = 'linear-gradient(to bottom, transparent, #ff0000, transparent)';
+        crack.style.boxShadow = '0 0 20px #ff0000';
+        crack.style.left = '50%';
+        crack.style.top = '50%';
+        crack.style.transformOrigin = 'top';
+        crack.style.transform = `rotate(${i * 45}deg)`;
+
+        cracks.appendChild(crack);
+
+        crack.animate([
+            { height: '0' },
+            { height: '100vh' }
+        ], {
+            duration: 800,
+            easing: 'ease-out',
+            fill: 'forwards'
+        });
+    }
+
+    setTimeout(() => cracks.remove(), 1500);
+}
 
 /* 우주 별 필드 생성 */
 function createStarField() {
