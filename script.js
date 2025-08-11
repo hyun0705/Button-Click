@@ -98,7 +98,7 @@ btn.addEventListener("click", () => {
         btn.disabled = true;
         btn.textContent = "실패 😵";
         resultMsg.style.display = "block";
-        resultMsg.textContent = `Game Over! 당신의 최고 레벨은 Lv.${level}입니다`;
+        resultMsg.innerHTML = `Game Over! 당신의 최고 레벨은 <span class="level-text">Lv.${level}</span>입니다`;
         const percentile = getMyPercentile(level);
         bestInfo.textContent = `지금까지의 최고 기록: Lv.${Math.max(level, prevBest)}`;
         myRank.textContent = `나는 상위 ${percentile}%입니다`;
@@ -153,7 +153,8 @@ window.addEventListener("DOMContentLoaded", () => {
             btn.disabled = true; //버튼 비활성화
             btn.textContent = "재도전 불가 😵";
             resultMsg.style.display = "block";
-            resultMsg.textContent = `Game Over! 당신의 최고 레벨은 Lv.${lastLevel} 입니다`;
+            resultMsg.innerHTML = `Game Over! 당신의 최고 레벨은 <span class="level-text">Lv.${lastLevel}</span> 입니다`;
+
             const percentile = getMyPercentile(lastLevel);
             myRank.textContent = `나는 상위 ${percentile}% 입니다`;
         }
@@ -543,6 +544,7 @@ function createStarField() {
 
 
 // 랭킹 통계 JSON 불러오기
+// 랭킹은 사용 안하지만 구현해놔서 남겨둠
 fetch('data/rankings.json')
     .then(res => res.json())
     .then(data => {

@@ -6,14 +6,14 @@
     <!--더블클릭시 화면확대 방지-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>럭키 버튼! | 나의 운은 어디까지?</title>
+    <title>럭키 버튼! - 나의 운은 어디까지?</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
         integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
+    <link rel="icon" type="image/png" href="/img/lucky-button.png">
 </head>
 
 <body>
@@ -37,7 +37,8 @@
 
         <div class="result" id="resultMsg"></div>
 
-        <div class="ranking">
+        <!-- 랭킹시스템 가리기(안쓸거) -->
+        <div class="ranking" style="display: none;">
             <h4>🏆 랭킹</h4>
             <ul id="rankingList">
                 <li>상위 4%는 ~스테이지에서 사망했습니다</li>
@@ -47,13 +48,20 @@
                 <li id="myRank">나는 상위 몇%입니다</li>
             </ul>
         </div>
+
+
         <p class="share" id="shareBtn">
             공유해서 1코인 얻으세요
             <a href="#">
                 <i class="fa-solid fa-share-nodes"></i>
             </a>
         </p>
-
+        <div>
+            <a href="https://github.com/hyun0705" target="_blank" rel="noopener noreferrer" class="ad-wrap">
+                <img alt="개발자 깃허브 구경하기" loading="lazy" decoding="async" src="img/lucky-button-removebg.png">
+            </a>
+            <p class="ad-text">개발자 깃허브 구경하기</p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

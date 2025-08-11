@@ -1,246 +1,296 @@
 html {
-    font-size: 16px;
-    /* 기본 1rem = 16px */
+  font-size: 16px;
+  /* 기본 1rem = 16px */
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: rgb(220, 255, 252);
-    touch-action: manipulation;
-    /* 더블터치 줌 방지 */
+  background-color: rgb(0, 0, 0);
+  touch-action: manipulation;
+  color: #d3d3d3;
+  /* 더블터치 줌 방지 */
 }
 
 
 #mobileOnlyNotice {
-    background-color: #fff3cd;
-    border: 2px dashed #eead53;
-    border-radius: 10px;
-    margin: 2rem;
+  background-color: #fff3cd;
+  border: 2px dashed #eead53;
+  border-radius: 10px;
+  margin: 2rem;
 }
 
 .container {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .main-title {
-    margin-top: 32px;
-    margin-bottom: 32px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 2rem;
-    text-align: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 2rem;
+  text-align: center;
 }
 
 .sub-title {
-    margin: 8px;
+  margin: 8px;
 }
 
 .press-btn {
-    margin: 20px;
+  margin: 20px;
 }
 
 .btn-container {
-    position: relative;
+  position: relative;
 }
 
 .btn {
-    cursor: pointer;
-    margin: 12px;
-    border: none;
-    background: linear-gradient(to right, #9fd8ff, #ff92aa);
-    padding: 10px 15px 10px 15px;
-    min-width: 100px;
-    height: auto;
-    box-sizing: border-box;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    /* 12px */
-    color: white;
-    font-weight: 700;
-    box-shadow: 0px 2px 2px 2px #ffffff40 inset, 0px -2px 2px 2px #00000020 inset;
-    transition: transform 0.05s, box-shadow 0.05s;
-    position: relative;
-    overflow: hidden;
+  background: #165055;
+  border: 2px solid #00eaff;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  box-shadow: 0 0 8px #00eaff, 0 0 16px #00eaff;
+  cursor: pointer;
+  margin: 12px;
+  padding: 10px 15px 10px 15px;
+  min-width: 100px;
+  height: auto;
+  box-sizing: border-box;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  /* 12px */
+  color: #d3d3d3;
+  font-weight: 700;
+  box-shadow: 0 0 10px #00f6ff, 0 0 20px #00f6ff;
+  transition: transform 0.05s, box-shadow 0.05s;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn:active {
-    transform: scale(0.95);
-    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.4);
+  transform: scale(0.95);
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .ranking {
-    margin: 32px;
+  margin: 32px;
 }
 
 .ranking ul li {
-    line-height: 1.4;
-    white-space: nowrap;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .result {
-    display: none;
-    margin: 12px;
+  display: none;
+  margin: 12px;
+}
+
+.ad-wrap {
+  display: block;
+  max-width: 720px;
+  /* 페이지에서 보일 최대 폭 */
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ad-wrap img {
+  display: block;
+  width: 25%;
+  height: auto;
+  margin: 0px auto;
+  margin-top: 20px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* 다크 배경에서 hover 피드백 */
+.ad-wrap:hover {
+  transform: translateY(-1px);
+}
+
+.ad-wrap {
+  transition: transform .15s ease;
+}
+
+.ad-text {
+  text-align: center;
+
+  color: #d3d3d3;
+  ;
+  font-size: 14px;
+}
+
+.level-text {
+  color: gold;
+  font-weight: bold;
+  font-size: 1.4em;
 }
 
 
-
-
 .share {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 .share a i {
 
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: #09b9c9;
 }
 
 
 /* 충격파 효과 */
 .shockwave {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 0;
-    pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  pointer-events: none;
+  border-style: solid;
 }
 
 .shockwave.active {
-    animation: shockwaveExpand 1s ease-out;
+  animation: shockwaveExpand 1s ease-out;
 }
 
 @keyframes shockwaveExpand {
-    0% {
-        border: 0px solid rgba(103, 186, 238, 0.8);
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 1;
-        /* 작고 불투명 */
-    }
+  0% {
+    border-width: 4px;
+    border-color: rgba(255, 255, 255, 1);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+    /* 작고 불투명 */
+  }
 
-    100% {
-        border: 2px solid rgba(11, 51, 77, 0.8);
-        transform: translate(-50%, -50%) scale(4);
-        opacity: 0;
-        /* 커지고 사라짐 */
-    }
+  100% {
+    border-width: 0px;
+    border-color: rgba(255, 255, 255, 1);
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0.;
+    /* 커지고 사라짐 */
+  }
 }
 
 .particle-container {
-    position: relative;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .particle {
-    position: absolute;
-    border-radius: 50%;
-    pointer-events: none;
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 /* 성공 파티클 */
 .particle.success {
-    width: 8px;
-    height: 8px;
-    background: linear-gradient(135deg, #3dd3ee, #ee258d);
-    box-shadow: 100 100 100px 100px rgba(41, 96, 180, 0.8);
-    animation: successParticle 1s ease-out forwards;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, #ffffff, #e8eb3d);
+  box-shadow: 0px 0px 6px 2px rgba(255, 255, 255, 0.8);
+  animation: successParticle 1.2s ease-out forwards;
 }
 
 /* 파티클 애니메이션 */
 @keyframes successParticle {
-    0% {
-        transform: translate(0, 0) scale(0.3);
-        opacity: 1;
-    }
+  0% {
+    transform: translate(0, 0) scale(0.3);
+    opacity: 1;
+  }
 
-    100% {
-        transform: translate(var(--tx), var(--ty)) scale(1);
-        opacity: 0;
-    }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1);
+    opacity: 0;
+  }
 }
 
 
 
 .stars {
-    position: fixed; /* 화면 스크롤과 무관하게 항상 고정 */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* 별 위에 마우스 이벤트가 걸리지 않게 함 */
-    z-index: -1; /* 콘텐츠 뒤쪽에 배치 */
+  position: fixed;
+  /* 화면 스크롤과 무관하게 항상 고정 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* 별 위에 마우스 이벤트가 걸리지 않게 함 */
+  z-index: -1;
+  /* 콘텐츠 뒤쪽에 배치 */
 }
 
 
 /* 개별 별 스타일 */
 .star {
-    position: absolute;
-    background: #1d769c;
-    border-radius: 50%;
-    animation: twinkle ease-in-out infinite;
+  position: absolute;
+  background: #0d88bd;
+  border-radius: 50%;
+  animation: twinkle ease-in-out infinite;
 }
 
 /* 별 반짝임 애니메이션 */
 @keyframes twinkle {
 
-    0%,
-    100% {
-        opacity: 0;
-        transform: scale(0.5);
-    }
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
 
-    50% {
-        opacity: 1;
-        transform: scale(1);
-    }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (max-width: 480px) {
-    html {
-        font-size: 14px;
-        /* 모바일에서 rem 단위 전체 축소 */
-    }
+  html {
+    font-size: 14px;
+    /* 모바일에서 rem 단위 전체 축소 */
+  }
 
-    .container {
-        width: 100%;
-        margin: 0 auto;
-        padding: 0;
+  .container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
 
-    }
+  }
 
-    .main-title {
-        font-size: 2rem;
-    }
+  .main-title {
+    font-size: 2rem;
+  }
 
-    .ranking {
-        margin: 16px;
-    }
+  .ranking {
+    margin: 16px;
+  }
 
-    .btn {
-        font-size: 1rem;
-        /* 14px */
-    }
+  .btn {
+    font-size: 1rem;
+    /* 14px */
+  }
 
 
-    .share {
-        font-size: 0.9rem;
-    }
+  .share {
+    font-size: 0.9rem;
+  }
 }
